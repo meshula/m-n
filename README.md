@@ -14,7 +14,11 @@ CMake Error at CMakeLists.txt:3 (add_executable):
   behavior.
 ```
 
+- unicode filename for c file is fine in cmake
 
+Can't add unicode filename to git
 
-
-
+```
+git add "h\303\251ll\303\262m\303\274\303\261.c"
+fatal: pathspec 'h\303\251ll\303\262m\303\274\303\261.c' did not match any files
+```
