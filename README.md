@@ -22,3 +22,43 @@ Can't add unicode filename to git
 git add "h\303\251ll\303\262m\303\274\303\261.c"
 fatal: pathspec 'h\303\251ll\303\262m\303\274\303\261.c' did not match any files
 ```
+
+solution:
+```sh
+git config --global core.precomposeunicode true
+git add héllòmüñ.c
+git status
+
+Changes to be committed:
+...
+	new file:   "h\303\251ll\303\262m\303\274\303\261.c"
+```
+
+- github create mün
+repo created as m-n
+
+héllòmüñ.c appears on github as héllòmüñ.c
+
+- modify héllòmüñ.c locally and push
+
+success
+
+- clone on mac
+
+success
+
+- clone on windows
+
+success
+
+- touch file on windows, commit, push
+
+success
+
+- touch file on linux, commit, push
+
+success
+
+- pull on mac without core.precomposeunicode true flag
+
+success
