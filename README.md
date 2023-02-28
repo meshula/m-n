@@ -24,6 +24,11 @@ common.copy c:\XXX\ï¿½sd-install-2023-02-24\include\boost-1_78\boost\vmd\deta
 The system cannot find the path specified.
 ```
 
+Also, bjam creates a corrupt directory name during the installation.
+```
+ⁿsd-install-2023-02-24
+```
+
 - unicode filename for c file is fine in cmake
 
 Can't add unicode filename to git
