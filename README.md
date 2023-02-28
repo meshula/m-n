@@ -14,6 +14,16 @@ CMake Error at CMakeLists.txt:3 (add_executable):
   behavior.
 ```
 
+- not demonstrated here, but, boost build fails when the installation target is a path with a unicode character; every copy fails with a message showing a corrupt path, e.g.
+
+```
+ copy /b "C:\XXX\ï¿½sd-install-2023-02-24\src\boost_1_78_0\boost\vmd\detail\recurse\data_equal\data_equal_9.hpp" + this-file-does-not-exist-A698EE7806899E69 "c:\XXX\ï¿½sd-install-2023-02-24\include\boost-1_78\boost\vmd\detail\recurse\data_equal\data_equal_9.hpp"
+
+...failed common.copy c:\XXX\ï¿½sd-install-2023-02-24\include\boost-1_78\boost\vmd\detail\recurse\data_equal\data_equal_9.hpp...
+common.copy c:\XXX\ï¿½sd-install-2023-02-24\include\boost-1_78\boost\vmd\detail\recurse\data_equal\data_equal_headers.hpp
+The system cannot find the path specified.
+```
+
 - unicode filename for c file is fine in cmake
 
 Can't add unicode filename to git
