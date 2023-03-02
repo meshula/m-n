@@ -45,7 +45,7 @@ The system cannot find the path specified.
 
 ## git
 
-- :bug: Can't add unicode filename (legibly) to git
+- :bug: Can't add unicode filename to git on mac
 
 ```
 git add "h\303\251ll\303\262m\303\274\303\261.c"
