@@ -63,14 +63,14 @@ Changes to be committed:
 	new file:   "h\303\251ll\303\262m\303\274\303\261.c"
 ```
 
+
 ## github
 
 - :bug:  github create mün - repo created as m-n
-
 - :butterfly: héllòmüñ.c appears on github as héllòmüñ.c
-
 - :butterfly: modify héllòmüñ.c locally and push
 - :butterfly: clone on mac
+- :butterfly: clone on mac without core.precomposeunicode true flag
 - :butterfly: clone on windows
 - :butterfly: touch file on windows, commit, push
 - :butterfly: touch file on linux, commit, push
