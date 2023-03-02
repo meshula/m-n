@@ -79,9 +79,6 @@ Changes to be committed:
 
 - :butterfly: add héllòmüñ.c to a changelist
 
-------
-
-
-- without core.precomposeunicode true flag
+ode true flag
 
 success
