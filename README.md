@@ -78,6 +78,8 @@ Changes to be committed:
 	new file:   "h\303\251ll\303\262m\303\274\303\261.c"
 ```
 
+- :bug: Git branches with characters in their names that are illegal in filenames on Windows lead to problems because branch names are used as filenames in the .git directory: https://github.com/git-for-windows/git/issues/2904 It's possible to create and push such a branch on macOs and cause errors on Windows. (Thanks @Simran)
+
 
 ## github
 
