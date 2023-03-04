@@ -4,6 +4,21 @@
 This project explores the ins and outs of unicode characters in filenames 
 in development workflows
 
+Clone the project into a directory with a unicode character to start the experiment:
+
+```sh
+git clone https://github.com/meshula/m-n.git mün
+```
+On MSVC,
+
+```sh
+cl héllòmüñ
+héllòmüñ.exe
+```
+various results and diagnostics ensue.
+
+Code for mac and linux to be added once the Windows side is fully explored.
+
 ## clang/gcc/msvc
 
 - :butterfly: all compilers can compile the c file, the embedded utf8 string prints correctly
