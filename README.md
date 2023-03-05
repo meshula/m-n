@@ -45,7 +45,7 @@ CMake Error at CMakeLists.txt:3 (add_executable):
 
 - :bug: boost build fails when the installation target is a path with a unicode character; every copy fails with a message showing a corrupt path. In the follow example, I tried to build to a directory named üsd-install.
 
-```
+```sh
  copy /b "C:\ï¿½sd-install\src\boost_1_78_0\boost\vmd\detail\recurse\data_equal\data_equal_9.hpp" + this-file-does-not-exist-A698EE7806899E69 "c:\ï¿½sd-install\include\boost-1_78\boost\vmd\detail\recurse\data_equal\data_equal_9.hpp"
 
 ...failed common.copy c:\ï¿½sd-install\include\boost-1_78\boost\vmd\detail\recurse\data_equal\data_equal_9.hpp...
@@ -54,7 +54,7 @@ The system cannot find the path specified.
 ```
 
 - :bug: bjam creates a corrupt directory name during the installation.
-```
+```sh
 ⁿsd-install
 ```
 
@@ -62,7 +62,7 @@ The system cannot find the path specified.
 
 - :bug: Can't add unicode filename to git on mac
 
-```
+```sh
 git add "h\303\251ll\303\262m\303\274\303\261.c"
 fatal: pathspec 'h\303\251ll\303\262m\303\274\303\261.c' did not match any files
 ```
@@ -80,7 +80,6 @@ Changes to be committed:
 
 - :bug: Git branches with characters in their names that are illegal in filenames on Windows lead to problems because branch names are used as filenames in the .git directory: https://github.com/git-for-windows/git/issues/2904 It's possible to create and push such a branch on macOs and cause errors on Windows. (Thanks @Simran)
 
-
 ## github
 
 - :bug:  github create mün - repo created as m-n
@@ -95,4 +94,10 @@ Changes to be committed:
 ## perforce
 
 - :butterfly: add héllòmüñ.c to a changelist
+
+## notes
+
+- :books: Fixing Unix/Linux/POSIX Filenames: Control Characters (such as Newline), Leading Dashes, and Other Problems, David A. Wheeler, 15 Nov 2020 https://dwheeler.com/essays/fixing-unix-linux-filenames.html
+
+
 
