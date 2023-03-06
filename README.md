@@ -12,7 +12,7 @@ git clone https://github.com/meshula/m-n.git mün
 On MSVC,
 
 ```sh
-cl héllòmüñ
+cl héllòmüñ.c
 héllòmüñ.exe
 ```
 various results and diagnostics ensue.
