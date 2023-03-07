@@ -17,6 +17,65 @@ héllòmüñ.exe
 ```
 various results and diagnostics ensue.
 
+In the following output, we can conclude that only this declaration
+```c
+unsigned char* umlaut_a = "ü"; is utf8
+```
+can be converted by windows to utf16 in a form that the win sdk can understand.
+
+C string literals declared with any adornments are not compatible with the win sdk.
+Only `umlaut_a` is convertible by `MultiByteToWideChar` such that win sdk functions succeed.
+
+```
++--------------------------------------------------+
+| Héllø Mün!                                       |
++--------------------------------------------------+
+
++--------------------------------------------------+
+| Size of wchar_t                                  |
++--------------------------------------------------+
+  size of wchar_t is 2
+
++--------------------------------------------------+
+| C umlaut U encodings                             |
++--------------------------------------------------+
+wchar_t* umlaut_u = L"ü"; is utf8
+unsigned char* umlaut_a = "ü"; is utf8
+wchar_t* umlaut_w = u"ü"; is utf8
+unsigned int* umlaut_W = U"ü"; is utf8
+wchar_t* umlaut_uu = L"\uc3bc"; is utf8
+
++--------------------------------------------------+
+| Check uft16 conversions                          |
++--------------------------------------------------+
+utf16 w required size is 2
+utf16 a required size is 11
+ L"héllòmüñ.c": 68 C3 A9 6C 6C C3 B2 6D C3 BC C3 B1 2E 63
+ as U16:        68
+ "héllòmüñ.c":  68 C3 A9 6C 6C C3 B2 6D C3 BC C3 B1 2E 63
+ as U16:        68 E9 6C 6C F2 6D FC F1 2E 63
+
++--------------------------------------------------+
+| GetFileAttributesW/A                             |
++--------------------------------------------------+
+GetFileAttributesW(u8"héllòmüñ.c") failed: 2
+GetFileAttributesA(u8"héllòmüñ.c") failed: 2
+GetFileAttributesW(u16"héllòmüñ.c") succeeded
+
++--------------------------------------------------+
+| FindFirstFileW/A                                 |
++--------------------------------------------------+
+FindFirstFileA("h*.c") succeeded h�ll�m��.c
+FindFirstFileW(L"h*.c") succeeded h�ll�m��.c
+  GetFileAttributesW on found path succeeded
+FindFirstFileW(utf16 converted) succeeded h�ll�m��.c
+  GetFileAttributesW on found path succeeded
+
++--------------------------------------------------+
+| Finished                                         |
++--------------------------------------------------+
+```
+
 Code for mac and linux to be added once the Windows side is fully explored.
 
 ## clang/gcc/msvc

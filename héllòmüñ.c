@@ -14,7 +14,52 @@ void set_utf8_locale(void) {
 #endif
 }
 
+void banner(const char* msg) {
+    printf("\n");
+    printf("+--------------------------------------------------+\n");
+    printf("| %s", msg);
+    for (int i = 0; i < 49 - strlen(msg); i++) {
+        printf(" ");
+    }
+    printf("|\n");
+    printf("+--------------------------------------------------+\n");
+}
+
 #ifdef _MSC_VER
+
+
+/// Converts regular std::string to UTF-16 windows string - Windows-only
+wchar_t* ArchWindowsUtf8ToUtf16W(const wchar_t* str)
+{
+    int size = MultiByteToWideChar(CP_UTF8, 0, (LPCCH) str, -1, NULL, 0);
+    if (size == 0) return NULL;
+    printf("utf16 w required size is %d\n", size);
+    wchar_t* new_str = (wchar_t*)malloc(size * sizeof(wchar_t));
+    if (new_str == NULL) return NULL;
+    if (MultiByteToWideChar(CP_UTF8, 0, (LPCCH) str, -1, new_str, size))
+    {
+        return new_str;
+    }
+    free(new_str);
+    return NULL;
+}
+/// Converts regular std::string to UTF-16 windows string - Windows-only
+wchar_t* ArchWindowsUtf8ToUtf16A(const char* str)
+{
+    int size = MultiByteToWideChar(CP_UTF8, 0, (LPCCH) str, -1, NULL, 0);
+    if (size == 0) return NULL;
+    printf("utf16 a required size is %d\n", size);
+    wchar_t* new_str = (wchar_t*)malloc(size * sizeof(wchar_t));
+    if (new_str == NULL) return NULL;
+    if (MultiByteToWideChar(CP_UTF8, 0, (LPCCH) str, -1, new_str, size))
+    {
+        return new_str;
+    }
+    free(new_str);
+    return NULL;
+}
+
+
 void test_conversions() {
 
     // as you will see below, wchar_t L strings are utf8, each character padded to 16 bits
@@ -34,81 +79,119 @@ void test_conversions() {
     unsigned int* umlaut_W = U"ü";
     wchar_t* umlaut_uu = L"\uc3bc";
 
-    printf("mark1\n");
+    banner("Size of wchar_t ");
     printf("  size of wchar_t is %d\n", (int) sizeof(wchar_t));
-    if (*umlaut_u == 0x00fc) {
-        printf("Umlaut U encoded as an L string is utf16: should be 0x00fc, is: %x\n", *umlaut_u);
-        printf("  second character is %x\n", *(umlaut_u + 1));
+
+    banner("C umlaut U encodings");
+    if (*umlaut_u == 0x00c3 && *(umlaut_u + 1) == 0xbc) {
+        printf("wchar_t* umlaut_u = L\"ü\"; is utf8\n");
+    }
+    else if (*umlaut_u == 0x00fc) {
+        printf("wchar_t* umlaut_u = L\"ü\"; is utf16\n");
     }
     else {
-        printf("Umlaut U encoded as an L string is not utf16: should be 0x00fc, is: %x\n", *umlaut_u);
-        printf("  second character is %x\n", *(umlaut_u + 1));
-    }
+        printf("wchar_t* umlaut_u = L\"ü\"; is not utf8 or utf16\n");}
     if (*umlaut_a == 0xc3 && *(umlaut_a + 1) == 0xbc) {
-        printf("Umlaut A encoded as an char string is utf8: should be 0xc3, is %x\n", *umlaut_a);
-        printf(" second character is %x\n", *(umlaut_a + 1));
+        printf("unsigned char* umlaut_a = \"ü\"; is utf8\n");
+    }
+    else if (*umlaut_a == 0xfc) {
+        printf("unsigned char* umlaut_a = \"ü\"; is utf16\n");
     }
     else {
-        printf("Umlaut A encoded as an char string is not utf8: should be 0xc3, is %x\n", *umlaut_a);
-        printf(" second character is %x\n", *(umlaut_a + 1));
+        printf("unsigned char* umlaut_a = \"ü\"; is not utf8 or utf16\n");
     }
-    if (*umlaut_w == 0x00fc) {
-        printf("Umlaut w encoded as an u8 string is utf16: should be 0x00fc, is: %x\n", *umlaut_w);
-        printf("  second character is %x\n", *(umlaut_w + 1));
+    if (*umlaut_w == 0x00c3 && *(umlaut_w + 1) == 0xbc) {
+        printf("wchar_t* umlaut_w = u\"ü\"; is utf8\n");
     }
-    else {
-        printf("Umlaut w encoded as an u8 string is not utf16: should be 0x00fc, is: %x\n", *umlaut_w);
-        printf("  second character is %x\n", *(umlaut_w + 1));
-    }
-    if (*umlaut_W == 0x00fc) {
-        printf("Umlaut w encoded as an U32 string is utf16: should be 0x00fc, is: %x\n", *umlaut_W);
-        printf("  second character is %x\n", *(umlaut_W + 1));
+    else if (*umlaut_w == 0x00fc) {
+        printf("wchar_t* umlaut_w = u\"ü\"; is utf16\n");
     }
     else {
-        printf("Umlaut w encoded as an U32 string is not utf16: should be 0x00fc, is: %x\n", *umlaut_W);
-        printf("  second character is %x\n", *(umlaut_W + 1));
+        printf("wchar_t* umlaut_w = u\"ü\"; is not utf8 or utf16\n");
+
+    }
+    if (*umlaut_W == 0x00c3 && *(umlaut_W + 1) == 0xbc) {
+        printf("unsigned int* umlaut_W = U\"ü\"; is utf8\n");
+    }
+    else if (*umlaut_W == 0x00fc) {
+        printf("unsigned int* umlaut_W = U\"ü\"; is utf16\n");
+    }
+    else {
+        printf("unsigned int* umlaut_W = U\"ü\"; is not utf8 or utf16\n");
     }
     if (*umlaut_uu == 0xc3bc) {
-        printf("Umlaut uu encoded as an L string is utf16: should be 0xc3bc, is: %x\n", *umlaut_uu);
+        printf("wchar_t* umlaut_uu = L\"\\uc3bc\"; is utf8\n");
     }
     else {
-        printf("Umlaut uu encoded as an L string is not utf16: should be 0xc3bc, is: %x\n", *umlaut_uu);
+        printf("wchar_t* umlaut_uu = L\"\\uc3bc\"; is not utf8 or utf16\n");
     }
-
+    
+    banner("Check uft16 conversions");
     wchar_t* self_file_w = L"héllòmüñ.c";
+    char* self_file_a = "héllòmüñ.c";
+    wchar_t* self_file_w_u16 = ArchWindowsUtf8ToUtf16W(self_file_w);
+    wchar_t* self_file_w_u8 = ArchWindowsUtf8ToUtf16A(self_file_a);
+
+    printf(" L\"héllòmüñ.c\":");
+    for (int i = 0; i < wcslen(self_file_w); i++) {
+        printf(" %02X", (unsigned char) self_file_w[i]);
+    }
+    printf("\n as U16:       ");
+    for (int i = 0; i < wcslen(self_file_w_u16); i++) {
+        printf(" %02X", (unsigned char) self_file_w_u16[i]);
+    }
+    printf("\n \"héllòmüñ.c\": ");
+    for (int i = 0; i < strlen(self_file_a); i++) {
+        printf(" %02X", (unsigned char) self_file_a[i]);
+    }
+    printf("\n as U16:       ");
+    for (int i = 0; i < wcslen(self_file_w_u8); i++) {
+        printf(" %02X", (unsigned char) self_file_w_u8[i]);
+    }
+    printf("\n");
+
+    banner("GetFileAttributesW/A");
     DWORD attribs_w = GetFileAttributesW(self_file_w);
     if (attribs_w == INVALID_FILE_ATTRIBUTES) {
-        printf("GetFileAttributesW failed: %d\n", GetLastError());
+        printf("GetFileAttributesW(u8\"%s\") failed: %d\n", self_file_a, GetLastError());
     }
     else {
         printf("GetFileAttributesW succeeded\n");
     }
 
-    char* self_file_a = "héllòmüñ.c";
     DWORD attribs = GetFileAttributesA(self_file_a);
     if (attribs == INVALID_FILE_ATTRIBUTES) {
-        printf("GetFileAttributesA failed: %d\n", GetLastError());
+        printf("GetFileAttributesA(u8\"%s\") failed: %d\n", self_file_a, GetLastError());
     }
     else {
         printf("GetFileAttributesA succeeded\n");
     }
 
+    if (self_file_w_u16 == NULL) {
+        printf("ArchWindowsUtf8ToUtf16 failed\n");
+    }
+    else {
+        DWORD attribs_u16 = GetFileAttributesW(self_file_w_u8);
+        if (attribs_u16 == INVALID_FILE_ATTRIBUTES) {
+            printf("GetFileAttributesW(u16\"%s\") failed: %d\n", self_file_a, GetLastError());
+        }
+        else {
+            printf("GetFileAttributesW(u16\"%s\") succeeded\n", self_file_a);
+        }
+    }
+
+    banner("FindFirstFileW/A");
     WIN32_FIND_DATAA findfile_data;
     HANDLE find = FindFirstFileA("h*.c", &findfile_data);
     if (find == INVALID_HANDLE_VALUE) {
-        printf("FindFirstFileA failed: %d\n", GetLastError());
+        printf("FindFirstFileA(\"h*.c\") failed: %d\n", GetLastError());
     }
     else {
-        printf("FindFirstFileA succeeded %s\n", findfile_data.cFileName);
+        printf("FindFirstFileA(\"h*.c\") succeeded %s\n", findfile_data.cFileName);
         if (!strcmp(self_file_a, findfile_data.cFileName)) {
-            printf("FindFirstFileA filename matches char* string %s\n", self_file_a);
         }
         else {
-            printf("FindFirstFileA filename doesn't match char* string %s\n", self_file_a);
-            printf("     Wn U8\n");
-            for (int i = 0; i < strlen(findfile_data.cFileName); i++) {
-                printf("  %d: %x %x\n", i, (unsigned char) findfile_data.cFileName[i], (unsigned char) self_file_a[i]);
-            }
+
         }
     }
     while (FindNextFileA(find, &findfile_data)) {
@@ -118,34 +201,42 @@ void test_conversions() {
     WIN32_FIND_DATAW findfile_dataw;
     find = FindFirstFileW(L"h*.c", &findfile_dataw);
     if (find == INVALID_HANDLE_VALUE) {
-        printf("FindFirstFileW failed: %d\n", GetLastError());
+        printf("FindFirstFileW(L\"h*.c\") failed: %d\n", GetLastError());
     }
     else {
         bool match_failed = false;
-        printf("FindFirstFileW succeeded %ls\n", findfile_dataw.cFileName);
-        if (!wcscmp(self_file_w, findfile_dataw.cFileName)) {
-            printf("FindFirstFileW filename matches char* string %ls\n", self_file_w);
-        }
-        else {
-            printf("FindFirstFileW filename doesn't match wchar* string %ls\n", self_file_w);
-            printf("     Wn U8w\n");
-            for (int i = 0; i < wcslen(findfile_dataw.cFileName); i++) {
-                printf("  %d: %x %x\n", i, (unsigned char) findfile_dataw.cFileName[i], (unsigned char) self_file_w[i]);
-            }
-        }
+        printf("FindFirstFileW(L\"h*.c\") succeeded %ls\n", findfile_dataw.cFileName);
         DWORD attribs_w = GetFileAttributesW(findfile_dataw.cFileName);
         if (attribs_w == INVALID_FILE_ATTRIBUTES) {
-            printf("GetFileAttributesW on found path failed: %d\n", GetLastError());
+            printf("  GetFileAttributesW on found path failed: %d\n", GetLastError());
         }
         else {
-            printf("GetFileAttributesW on found path succeeded\n");
+            printf("  GetFileAttributesW on found path succeeded\n");
+        }
+    }
+    while (FindNextFileW(find, &findfile_dataw)) {
+        printf("FindNextFileW succeeded %ls\n", findfile_dataw.cFileName);
+    }
+    find = FindFirstFileW(self_file_w_u8, &findfile_dataw);
+    if (find == INVALID_HANDLE_VALUE) {
+        printf("FindFirstFileW(utf16 converted) failed: %d\n", GetLastError());
+    }
+    else {
+        bool match_failed = false;
+        printf("FindFirstFileW(utf16 converted) succeeded %ls\n", findfile_dataw.cFileName);
+        DWORD attribs_w = GetFileAttributesW(findfile_dataw.cFileName);
+        if (attribs_w == INVALID_FILE_ATTRIBUTES) {
+            printf("  GetFileAttributesW on found path failed: %d\n", GetLastError());
+        }
+        else {
+            printf("  GetFileAttributesW on found path succeeded\n");
         }
     }
     while (FindNextFileW(find, &findfile_dataw)) {
         printf("FindNextFileW succeeded %ls\n", findfile_dataw.cFileName);
     }
 
-    printf("mark3\n");
+    banner("Finished");
 }
 #else
 void test_conversions() {
@@ -154,9 +245,9 @@ void test_conversions() {
 #endif
 
 int main(void) {
+    banner("Héllø Mün!");
     set_utf8_locale();
     test_conversions();
-    printf("Héllø Mün!\n");
     return 0;
 }
 
