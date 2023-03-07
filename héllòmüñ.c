@@ -33,7 +33,6 @@ wchar_t* ArchWindowsUtf8ToUtf16W(const wchar_t* str)
 {
     int size = MultiByteToWideChar(CP_UTF8, 0, (LPCCH) str, -1, NULL, 0);
     if (size == 0) return NULL;
-    printf("utf16 w required size is %d\n", size);
     wchar_t* new_str = (wchar_t*)malloc(size * sizeof(wchar_t));
     if (new_str == NULL) return NULL;
     if (MultiByteToWideChar(CP_UTF8, 0, (LPCCH) str, -1, new_str, size))
@@ -90,7 +89,12 @@ void test_conversions() {
         printf("wchar_t* umlaut_u = L\"ü\"; is utf16\n");
     }
     else {
-        printf("wchar_t* umlaut_u = L\"ü\"; is not utf8 or utf16\n");}
+        printf("wchar_t* umlaut_u = L\"ü\"; is not utf8 or utf16\n");
+    }
+    for (int i = 0; i < 6; ++i)
+        printf("%02x ", ((unsigned char*)umlaut_u)[i]);
+    printf(" wcslen is %d\n\n", (int)wcslen(umlaut_u));
+
     if (*umlaut_a == 0xc3 && *(umlaut_a + 1) == 0xbc) {
         printf("unsigned char* umlaut_a = \"ü\"; is utf8\n");
     }
@@ -100,6 +104,10 @@ void test_conversions() {
     else {
         printf("unsigned char* umlaut_a = \"ü\"; is not utf8 or utf16\n");
     }
+    for (int i = 0; i < 4; ++i)
+        printf("%02x ", ((unsigned char*)umlaut_a)[i]);
+    printf(" wcslen is %d\n\n", (int)sizeof(umlaut_a), (int)wcslen((wchar_t*) umlaut_a));
+
     if (*umlaut_w == 0x00c3 && *(umlaut_w + 1) == 0xbc) {
         printf("wchar_t* umlaut_w = u\"ü\"; is utf8\n");
     }
@@ -108,8 +116,11 @@ void test_conversions() {
     }
     else {
         printf("wchar_t* umlaut_w = u\"ü\"; is not utf8 or utf16\n");
-
     }
+    for (int i = 0; i < 6; ++i)
+        printf("%02x ", ((unsigned char*)umlaut_w)[i]);
+    printf(" wcslen is %d\n\n", (int)sizeof(umlaut_w), (int)wcslen(umlaut_w));
+
     if (*umlaut_W == 0x00c3 && *(umlaut_W + 1) == 0xbc) {
         printf("unsigned int* umlaut_W = U\"ü\"; is utf8\n");
     }
@@ -125,7 +136,24 @@ void test_conversions() {
     else {
         printf("wchar_t* umlaut_uu = L\"\\uc3bc\"; is not utf8 or utf16\n");
     }
+    for (int i = 0; i < 12; ++i)
+        printf("%02x ", ((unsigned char*)umlaut_W)[i]);
+    printf(" wcslen is %d\n\n", (int)sizeof(umlaut_W), (int)wcslen((wchar_t*) umlaut_W));
     
+    banner("check wcslen(héllòmüñ), should be 8");
+    wchar_t* hello_u = L"héllòmüñ";
+    unsigned char* hello_a = "héllòmüñ";
+    wchar_t* hello_w = u"héllòmüñ";
+    unsigned int* hello_W = U"héllòmüñ";
+    wchar_t* hello_uu = L"\u0068\u00e9\u006c\u006c\u00f2\u006d\u00fc\u00f1";
+    wchar_t* hello_utf16 = ArchWindowsUtf8ToUtf16A(hello_a);
+    printf("hello_u: %d\n", (int)wcslen(hello_u));
+    printf("hello_a: %d\n", (int)wcslen((wchar_t*) hello_a));
+    printf("hello_w: %d\n", (int)wcslen(hello_w));
+    printf("hello_W: %d\n", (int)wcslen((wchar_t*) hello_W));
+    printf("hello_uu: %d\n", (int)wcslen(hello_uu));
+    printf("hello_utf16: %d\n", (int)wcslen(hello_utf16));
+
     banner("Check uft16 conversions");
     wchar_t* self_file_w = L"héllòmüñ.c";
     char* self_file_a = "héllòmüñ.c";

@@ -26,9 +26,11 @@ can be converted by windows to utf16 in a form that the win sdk can understand.
 C string literals declared with any adornments are not compatible with the win sdk.
 Only `umlaut_a` is convertible by `MultiByteToWideChar` such that win sdk functions succeed.
 
+Same for the wide char functions such as wcslen, they expect as input, u16 encoded strings.
+
 ```
 +--------------------------------------------------+
-| Héllø Mün!                                       |
+| Héllø Mün!                                    |
 +--------------------------------------------------+
 
 +--------------------------------------------------+
@@ -40,15 +42,33 @@ Only `umlaut_a` is convertible by `MultiByteToWideChar` such that win sdk functi
 | C umlaut U encodings                             |
 +--------------------------------------------------+
 wchar_t* umlaut_u = L"ü"; is utf8
+c3 00 bc 00 00 00  wcslen is 2
+
 unsigned char* umlaut_a = "ü"; is utf8
+c3 bc 00 00  wcslen is 8
+
 wchar_t* umlaut_w = u"ü"; is utf8
+c3 00 bc 00 00 00  wcslen is 8
+
 unsigned int* umlaut_W = U"ü"; is utf8
 wchar_t* umlaut_uu = L"\uc3bc"; is utf8
+c3 00 00 00 bc 00 00 00 00 00 00 00  wcslen is 8
+
+
++--------------------------------------------------+
+| check wcslen(héllòmüñ), should be 8          |
++--------------------------------------------------+
+utf16 a required size is 9
+hello_u: 12
+hello_a: 6
+hello_w: 12
+hello_W: 1
+hello_uu: 8
+hello_utf16: 8
 
 +--------------------------------------------------+
 | Check uft16 conversions                          |
 +--------------------------------------------------+
-utf16 w required size is 2
 utf16 a required size is 11
  L"héllòmüñ.c": 68 C3 A9 6C 6C C3 B2 6D C3 BC C3 B1 2E 63
  as U16:        68
