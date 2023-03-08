@@ -176,6 +176,7 @@ Changes to be committed:
 
 ## notes
 
+- :books: The Absolute Minimum https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/
 - :books: UTF8 everywhere https://utf8everywhere.org
 - :books: OpenAssetIO string encoding https://github.com/OpenAssetIO/OpenAssetIO/blob/main/doc/decisions/DR005-String-encoding.md
 - :books: Fixing Unix/Linux/POSIX Filenames: Control Characters (such as Newline), Leading Dashes, and Other Problems, David A. Wheeler, 15 Nov 2020 https://dwheeler.com/essays/fixing-unix-linux-filenames.html
