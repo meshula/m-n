@@ -176,6 +176,7 @@ Changes to be committed:
 
 ## notes
 
+- :computer: Some Utf8 -> 16 code that's easy to read: https://gist.github.com/tommai78101/3631ed1f136b78238e85582f08bdc618
 - :books: The Absolute Minimum https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/
 - :books: UTF8 everywhere https://utf8everywhere.org
 - :books: OpenAssetIO string encoding https://github.com/OpenAssetIO/OpenAssetIO/blob/main/doc/decisions/DR005-String-encoding.md
