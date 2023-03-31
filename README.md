@@ -181,6 +181,9 @@ Changes to be committed:
 - :books: UTF8 everywhere https://utf8everywhere.org
 - :books: OpenAssetIO string encoding https://github.com/OpenAssetIO/OpenAssetIO/blob/main/doc/decisions/DR005-String-encoding.md
 - :books: Fixing Unix/Linux/POSIX Filenames: Control Characters (such as Newline), Leading Dashes, and Other Problems, David A. Wheeler, 15 Nov 2020 https://dwheeler.com/essays/fixing-unix-linux-filenames.html
+- :computer: a yikes hack to bridge utf16 and utf8, mostly intended to help with Microsoft wchar APIs: https://simonsapin.github.io/wtf-8/
+
+
 
 
 
